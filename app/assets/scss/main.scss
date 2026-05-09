@@ -1,8 +1,17 @@
 @use 'reset';
 @use 'colors';
 
+@font-face {
+  font-family: 'TTCommons';
+  src: url('/fonts/TTCommons-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'TTCommons', sans-serif;
+  color: $text-color;
 }
 
 a {
