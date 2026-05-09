@@ -58,7 +58,7 @@ watch(currentPage, (newValue) => {
             :src="'https://picsum.photos/seed/' + article.id + '/640/480'"
             :alt="article.title"
           />
-          <p class="article__title">{{ article.title }}</p>
+          <p class="article__title">{{ capitalize(article.preview) }}</p>
           <p class="article__text">Read more</p>
         </NuxtLink>
       </div>
@@ -95,7 +95,7 @@ watch(currentPage, (newValue) => {
       </div>
     </template>
     <template v-else-if="articlesStatus === 'pending'">
-      <div class="articles__loader loader"></div>
+      <Loader class="articles__loader" />
     </template>
     <template v-else>
       <p class="articles__error">Unfortunately, an error occurred when uploading the articles</p>
@@ -121,6 +121,10 @@ watch(currentPage, (newValue) => {
     margin-bottom: 50px;
   }
 
+  &__loader {
+    margin: 59px auto 0;
+  }
+
   &__error {
     margin-top: 59px;
     font-size: 52px;
@@ -129,6 +133,7 @@ watch(currentPage, (newValue) => {
 }
 
 .article {
+  width: 280px;
   cursor: pointer;
   overflow: hidden;
   position: relative;
@@ -145,6 +150,12 @@ watch(currentPage, (newValue) => {
     margin-top: 24px;
     font-size: 20px;
     line-height: 120%;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__text {
@@ -201,49 +212,6 @@ watch(currentPage, (newValue) => {
     &_reverse {
       transform: scaleX(-1);
     }
-  }
-}
-
-.loader {
-  width: 48px;
-  height: 48px;
-  margin: 59px auto 0;
-  border-radius: 50%;
-  position: relative;
-  animation: rotate 1s linear infinite;
-
-  &::before {
-    content: '';
-    box-sizing: border-box;
-    position: absolute;
-    inset: 0px;
-    border-radius: 50%;
-    border: 5px solid $text-color;
-    animation: prixClipFix 3s linear infinite;
-  }
-}
-
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes prixClipFix {
-  0% {
-    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
-  }
-  25% {
-    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
-  }
-  50% {
-    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
-  }
-  75% {
-    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
-  }
-  100% {
-    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
 }
 </style>
