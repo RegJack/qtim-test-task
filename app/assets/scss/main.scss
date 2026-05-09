@@ -1,12 +1,15 @@
-// Colors
-
-$primary-color: #E2BEFF;
-
-$text-color: #101010;
-$hover-color: #E8E8E8;
-$button-color: #F3F3F3;
-$background-color: #FFFFFF;
+@use 'reset';
+@use 'colors';
 
 body {
   font-family: 'Inter', sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: $text-color;
+}
+
+a, button {
+  transition: background-color 0.5s;
 }
