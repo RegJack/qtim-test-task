@@ -1,9 +1,45 @@
 <script lang="ts" setup>
 import type Article from '~/types/api'
 
-const { data: articles, status: articlesStatus } = useFetch<Article[]>(
+const router = useRouter()
+const route = useRoute()
+
+const { data: articles, status: articlesStatus } = await useFetch<Article[]>(
   'https://6082e3545dbd2c001757abf5.mockapi.io/qtim-test-work/posts/'
 )
+
+const articlesPerPage = ref(8)
+const pageAmount = computed(() =>
+  articles.value ? Math.ceil(articles.value.length / articlesPerPage.value) : 0
+)
+const currentPage = ref(
+  route.query.page
+    ? parseInt(`${route.query.page}`) <= pageAmount.value
+      ? parseInt(`${route.query.page}`)
+      : 1
+    : 1
+)
+
+const pagedArticlesArray = computed(() =>
+  articles.value?.slice(
+    (currentPage.value - 1) * articlesPerPage.value,
+    currentPage.value * articlesPerPage.value
+  )
+)
+
+const defaultLeftVisiblePageButton = computed(() =>
+  currentPage.value > 2
+    ? currentPage.value < pageAmount.value - 2
+      ? currentPage.value - 1
+      : pageAmount.value - 4
+    : 1
+)
+const leftVisiblePageButton = ref(defaultLeftVisiblePageButton.value)
+
+watch(currentPage, (newValue) => {
+  leftVisiblePageButton.value = defaultLeftVisiblePageButton.value
+  router.push({ query: { ...route.query, page: newValue } })
+})
 </script>
 
 <template>
@@ -12,7 +48,7 @@ const { data: articles, status: articlesStatus } = useFetch<Article[]>(
     <template v-if="articlesStatus === 'success'">
       <div class="articles__list">
         <NuxtLink
-          v-for="article in articles"
+          v-for="article in pagedArticlesArray"
           :key="article.id"
           :to="'article/' + article.id"
           class="articles__article article"
@@ -25,6 +61,37 @@ const { data: articles, status: articlesStatus } = useFetch<Article[]>(
           <p class="article__title">{{ article.title }}</p>
           <p class="article__text">Read more</p>
         </NuxtLink>
+      </div>
+      <div class="articles__pagination pagination">
+        <button
+          v-if="leftVisiblePageButton > 1"
+          class="pagination__button pagination__arrow-button"
+          @click="leftVisiblePageButton -= 1"
+        >
+          <img
+            class="pagination__arrow pagination__arrow_reverse"
+            src="/img/pagination-arrow.svg"
+            alt="Pagination arrow"
+          />
+        </button>
+        <button
+          v-for="(n, index) in leftVisiblePageButton > 1 && leftVisiblePageButton < pageAmount - 4
+            ? 4
+            : 5"
+          :key="leftVisiblePageButton + index"
+          class="pagination__button"
+          :class="{ pagination__button_active: leftVisiblePageButton + index === currentPage }"
+          @click="currentPage = leftVisiblePageButton + index"
+        >
+          {{ leftVisiblePageButton + index }}
+        </button>
+        <button
+          v-if="leftVisiblePageButton < pageAmount - 4"
+          class="pagination__button pagination__arrow-button"
+          @click="leftVisiblePageButton += 1"
+        >
+          <img class="pagination__arrow" src="/img/pagination-arrow.svg" alt="Pagination arrow" />
+        </button>
       </div>
     </template>
     <template v-else-if="articlesStatus === 'pending'">
@@ -94,6 +161,46 @@ const { data: articles, status: articlesStatus } = useFetch<Article[]>(
   &:hover {
     transform: translateY(-20px);
     overflow: visible;
+  }
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+
+  &__button {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: $button-color;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+
+    &_active {
+      background-color: $text-color;
+      color: $background-color;
+
+      &:hover {
+        background-color: $text-color;
+      }
+    }
+  }
+
+  &__arrow-button {
+    background-color: $background-color;
+    border: 1px solid $hover-color;
+  }
+
+  &__arrow {
+    &_reverse {
+      transform: scaleX(-1);
+    }
   }
 }
 
