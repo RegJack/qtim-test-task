@@ -4,7 +4,11 @@ import type Article from '~/types/api'
 const route = useRoute()
 const articleId = computed(() => route.params.id)
 
-const { data: article, status: articleStatus } = await useFetch<Article>(
+const {
+  data: article,
+  status: articleStatus,
+  error: articleError
+} = await useFetch<Article>(
   `https://6082e3545dbd2c001757abf5.mockapi.io/qtim-test-work/posts/${articleId.value}`
 )
 </script>
@@ -25,7 +29,12 @@ const { data: article, status: articleStatus } = await useFetch<Article>(
       <Loader class="article__loader" />
     </template>
     <template v-else>
-      <p class="article__error">Unfortunately, an error occurred when uploading the articles</p>
+      <p v-if="articleError?.status === 404" class="article__error">
+        Unfortunately, there is no article with this id
+      </p>
+      <p v-else class="article__error">
+        Unfortunately, an error occurred when uploading the articles
+      </p>
     </template>
   </main>
 </template>
