@@ -55,7 +55,7 @@ watch(currentPage, (newValue) => {
         >
           <img
             class="article__image"
-            :src="'https://picsum.photos/seed/' + article.id + '/640/480'"
+            :src="'https://placedog.net/640/480?id=' + article.id"
             :alt="article.title"
           />
           <p class="article__title">{{ capitalize(article.preview) }}</p>
