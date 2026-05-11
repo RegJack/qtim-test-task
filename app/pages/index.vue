@@ -106,6 +106,7 @@ watch(currentPage, (newValue) => {
 <style lang="scss" scoped>
 .articles {
   max-width: 1220px;
+  box-sizing: content-box;
   width: fit-content;
   margin: 120px auto 140px;
   padding: 20px;
