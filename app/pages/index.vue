@@ -50,7 +50,7 @@ watch(currentPage, (newValue) => {
         <NuxtLink
           v-for="article in pagedArticlesArray"
           :key="article.id"
-          :to="'article/' + article.id"
+          :to="'/' + article.id"
           class="articles__article article"
         >
           <img
