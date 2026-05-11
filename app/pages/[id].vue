@@ -19,7 +19,7 @@ const {
       <h1 class="article__title">{{ capitalize(article.preview) }}</h1>
       <img
         class="article__image"
-        :src="'https://picsum.photos/seed/' + article.id + '/640/480'"
+        :src="'https://placedog.net/640/480?id=' + article.id"
         alt="article.title"
       />
       <p class="article__subtitle">About</p>
@@ -43,9 +43,34 @@ const {
 .article {
   max-width: 1217px;
   margin: 120px auto 80px;
+  padding: 0 20px;
+
+  @media (max-width: 1220px) {
+    margin-top: 100px;
+  }
+
+  @media (max-width: 880px) {
+    margin-top: 60px;
+  }
+
+  @media (max-width: 550px) {
+    margin-top: 40px;
+  }
 
   &__title {
     font-size: 84px;
+
+    @media (max-width: 1220px) {
+      font-size: 62px;
+    }
+
+    @media (max-width: 880px) {
+      font-size: 48px;
+    }
+
+    @media (max-width: 550px) {
+      font-size: 36px;
+    }
   }
 
   &__image {
@@ -55,6 +80,20 @@ const {
     object-position: center;
     margin-top: 73px;
     margin-bottom: 80px;
+
+    @media (max-width: 1220px) {
+      height: 50%;
+    }
+
+    @media (max-width: 880px) {
+      margin-top: 60px;
+      margin-bottom: 70px;
+    }
+
+    @media (max-width: 550px) {
+      margin-top: 40px;
+      margin-bottom: 50px;
+    }
   }
 
   &__subtitle {
@@ -65,7 +104,7 @@ const {
   &__text {
     font-size: 36px;
     line-height: 124%;
-    width: 695px;
+    max-width: 695px;
   }
 
   &__loader {
