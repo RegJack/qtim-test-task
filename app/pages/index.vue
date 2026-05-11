@@ -105,20 +105,41 @@ watch(currentPage, (newValue) => {
 
 <style lang="scss" scoped>
 .articles {
-  max-width: 1217px;
+  max-width: 1220px;
+  width: fit-content;
   margin: 120px auto 140px;
+  padding: 20px;
+
+  @media (max-width: 1110px) {
+    margin: 60px auto 90px;
+  }
+
+  @media (max-width: 880px) {
+    margin: 30px auto 60px;
+  }
 
   &__title {
     font-size: 84px;
   }
 
   &__list {
-    display: flex;
+    display: inline-grid;
+    grid-template-columns: repeat(4, minmax(280px, 280px));
     column-gap: 32px;
     row-gap: 40px;
-    flex-wrap: wrap;
     margin-top: 59px;
     margin-bottom: 50px;
+
+    @media (max-width: 1256px) {
+      grid-template-columns: repeat(3, 280px);
+    }
+
+    @media (max-width: 944px) {
+      grid-template-columns: repeat(2, 280px);
+    }
+    @media (max-width: 632px) {
+      grid-template-columns: repeat(1, 280px);
+    }
   }
 
   &__loader {
